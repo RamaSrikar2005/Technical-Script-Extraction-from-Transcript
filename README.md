@@ -119,6 +119,9 @@ curl -X POST http://localhost:8000/extract \
 **Web UI — Extracted skills result**
 ![Extracted skills result](Screenshot.3.png)
 
+**Web UI — Paste transcript and extract skills**
+![Paste transcript input with extracted skills](Screenshot.4.png)
+
 ## How Extraction Works
 
 Skills are extracted using a two-stage hybrid approach:
