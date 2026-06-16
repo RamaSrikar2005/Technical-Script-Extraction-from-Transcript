@@ -249,6 +249,69 @@
 
     .reset-btn:hover { background: rgba(99, 102, 241, 0.28); }
 
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+      color: #475569;
+      font-size: 13px;
+    }
+
+    .divider::before, .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: rgba(99, 102, 241, 0.2);
+    }
+
+    .textarea-box {
+      background: rgba(10, 18, 50, 0.55);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      border-radius: 14px;
+      padding: 18px 20px;
+    }
+
+    .textarea-box textarea {
+      width: 100%;
+      min-height: 140px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(99,102,241,0.25);
+      border-radius: 8px;
+      color: #cbd5e1;
+      font-family: inherit;
+      font-size: 14px;
+      padding: 12px 14px;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .textarea-box textarea::placeholder { color: #475569; }
+    .textarea-box textarea:focus { border-color: #818cf8; }
+
+    .extract-btn {
+      margin-top: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 20px;
+      background: rgba(99, 102, 241, 0.25);
+      border: 1px solid rgba(99, 102, 241, 0.5);
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #a5b4fc;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s;
+    }
+
+    .extract-btn:hover { background: rgba(99, 102, 241, 0.4); }
+    .extract-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
     .error-box {
       display: none;
       margin-top: 16px;
@@ -305,6 +368,18 @@
     <p class="hint">TXT, PDF, DOCX supported</p>
   </div>
 
+  <div class="divider">or paste transcript text</div>
+
+  <div class="textarea-box">
+    <textarea id="transcriptInput" placeholder="Paste interview transcript here…"></textarea>
+    <button class="extract-btn" id="extractBtn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      Extract Skills
+    </button>
+  </div>
+
   <div class="error-box" id="errorBox"></div>
 
   <div class="loader glass" id="loader">
@@ -348,6 +423,8 @@
   const results = document.getElementById("results");
   const errorBox = document.getElementById("errorBox");
   const resetBtn = document.getElementById("resetBtn");
+  const transcriptInput = document.getElementById("transcriptInput");
+  const extractBtn = document.getElementById("extractBtn");
 
   const tagContainers = {
     languages: document.getElementById("langTags"),
@@ -371,12 +448,43 @@
 
   resetBtn.addEventListener("click", reset);
 
+  extractBtn.addEventListener("click", () => {
+    const text = transcriptInput.value.trim();
+    if (!text) return;
+    handleText(text);
+  });
+
   function reset() {
     results.classList.remove("visible");
     errorBox.classList.remove("visible");
     loader.classList.remove("visible");
     dropzone.style.display = "";
     fileInput.value = "";
+    transcriptInput.value = "";
+    extractBtn.disabled = false;
+  }
+
+  async function handleText(text) {
+    errorBox.classList.remove("visible");
+    loader.classList.add("visible");
+    results.classList.remove("visible");
+    extractBtn.disabled = true;
+
+    try {
+      const res = await fetch("/extract", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ transcript: text }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || "Extraction failed");
+      renderResults(data);
+    } catch (err) {
+      loader.classList.remove("visible");
+      extractBtn.disabled = false;
+      errorBox.textContent = err.message;
+      errorBox.classList.add("visible");
+    }
   }
 
   async function handleFile(file) {

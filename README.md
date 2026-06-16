@@ -1,6 +1,6 @@
 # Technical Skill Extraction
 
-Extract technical skills from interview transcripts automatically. Upload a TXT, PDF, or DOCX file and get a structured breakdown of the candidate's skills across four categories.
+Extract technical skills from interview transcripts automatically. Upload a TXT, PDF, or DOCX file **or paste transcript text directly** and get a structured breakdown of the candidate's skills across four categories.
 
 ## Features
 
@@ -9,7 +9,7 @@ Extract technical skills from interview transcripts automatically. Upload a TXT,
 - Handles misspellings (e.g. `Pthon` → `Python`, `Reakt` → `React`)
 - Normalizes aliases and abbreviations (e.g. `JS` → `JavaScript`, `k8s` → `Kubernetes`, `Postgres` → `PostgreSQL`)
 - Hybrid extraction: dataset-based fuzzy matching + LLM for maximum coverage
-- Clean web UI with drag-and-drop file upload
+- Clean web UI with drag-and-drop file upload or paste-text input
 
 ## Tech Stack
 
@@ -73,7 +73,12 @@ The app will be available at `http://localhost:8000`.
 
 ### Web UI
 
-Open `http://localhost:8000` in your browser. Drag and drop (or click to select) a transcript file. Extracted skills are displayed in categorized cards.
+Open `http://localhost:8000` in your browser. You can either:
+
+- **Upload a file** — drag and drop (or click to select) a TXT, PDF, or DOCX transcript
+- **Paste text** — type or paste the transcript directly into the text box and click **Extract Skills**
+
+Extracted skills are displayed in categorized cards.
 
 ### API
 
