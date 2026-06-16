@@ -113,8 +113,8 @@ curl -X POST http://localhost:8000/extract \
 **Running the server in VS Code**
 ![Server running in VS Code terminal](Screenshot.1.png)
 
-**Web UI — Upload screen**
-![Upload screen](Screenshot.2.png)
+**Web UI — Main interface**
+![Main UI with file upload and paste transcript options](Screenshot_main_UI.png)
 
 **Web UI — Extracted skills result**
 ![Extracted skills result](Screenshot.3.png)
