@@ -231,6 +231,42 @@
 
     .empty { font-size: 13px; color: #475569; font-style: italic; }
 
+    .flat-skills-card {
+      margin-top: 14px;
+      padding: 18px 20px;
+    }
+
+    .flat-skills-card h3 {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #e2e8f0;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .flat-skills-card h3 .skill-count {
+      font-size: 11px;
+      font-weight: 500;
+      color: #64748b;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    .flat-skills-card .tag {
+      background: rgba(255,255,255,0.07);
+      color: #e2e8f0;
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 500;
+      display: inline-block;
+    }
+
     .reset-btn {
       margin-top: 20px;
       display: inline-flex;
@@ -407,6 +443,14 @@
         <div class="tags" id="cloudTags"></div>
       </div>
     </div>
+    <div class="flat-skills-card glass">
+      <h3>
+        All Skills
+        <span class="skill-count" id="skillCount"></span>
+      </h3>
+      <div class="tags" id="allSkillTags"></div>
+    </div>
+
     <button class="reset-btn" id="resetBtn">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/>
@@ -522,6 +566,12 @@
         ? skills.map(s => `<span class="tag">${s}</span>`).join("")
         : `<span class="empty">None detected</span>`;
     }
+
+    const flat = data.skills || [];
+    document.getElementById("skillCount").textContent = `${flat.length} skill${flat.length !== 1 ? "s" : ""}`;
+    document.getElementById("allSkillTags").innerHTML = flat.length
+      ? flat.map(s => `<span class="tag">${s}</span>`).join("")
+      : `<span class="empty">None detected</span>`;
 
     results.classList.add("visible");
   }

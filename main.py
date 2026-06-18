@@ -21,6 +21,7 @@ class SkillsResponse(BaseModel):
     frameworks: list[str]
     databases: list[str]
     cloud: list[str]
+    skills: list[str]  # flat sorted union of all categories
 
 
 @app.get("/")

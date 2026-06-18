@@ -41,18 +41,22 @@ def match_from_dataset(transcript: str) -> dict:
             found[category].add(canonical)
 
     # Step 2 — fuzzy match on transcript tokens for typo/misspelling coverage
+    # Both token and term must be >= 5 chars to avoid short common words
+    # matching short aliases (e.g. "and" fuzzy-matching "antd")
     tokens = _extract_tokens(transcript)
     for token in tokens:
         tok_lower = token.lower()
-        if len(tok_lower) < 2:
+        if len(tok_lower) < 5:
             continue
         for category, canonical, term in _ENTRIES:
             if canonical in found[category]:
                 continue
+            if len(term) < 5:
+                continue
             if abs(len(tok_lower) - len(term)) > 4:
                 continue
             score = fuzz.ratio(tok_lower, term)
-            if score >= 88:
+            if score >= 85:
                 found[category].add(canonical)
 
     return {cat: sorted(skills) for cat, skills in found.items()}
